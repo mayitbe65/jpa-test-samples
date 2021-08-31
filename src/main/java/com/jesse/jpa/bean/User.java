@@ -1,8 +1,8 @@
 package com.jesse.jpa.bean;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -15,6 +15,7 @@ import java.util.Date;
 @Entity
 @Table(name = "user")
 @DynamicInsert
+@DynamicUpdate
 //@JsonIgnoreProperties(value = { "hibernateLazyInitializer"})
 public class User {
 
@@ -23,7 +24,9 @@ public class User {
     private Integer id;
 
     private String username;
+
     private String name;
 
+    @Column(name= "create_time", nullable = false, updatable = false)
     private Date createTime;
 }

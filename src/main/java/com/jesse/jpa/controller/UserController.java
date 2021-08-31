@@ -2,10 +2,13 @@ package com.jesse.jpa.controller;
 
 import com.jesse.jpa.bean.User;
 import com.jesse.jpa.mapper.UserRepository;
+import com.jesse.jpa.utils.UpdateUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author yu.zhang
@@ -36,5 +39,16 @@ public class UserController {
     @PostMapping("/user/create")
     public User userAdd(@RequestBody User user) {
         return userRepository.save(user);
+    }
+
+    @PostMapping("/user/update")
+    public User userUpdate(@RequestBody User user) {
+        Optional<User> optionalUser = userRepository.findById(user.getId());
+        if (!optionalUser.isPresent()) {
+            return null;
+        }
+        User updateUser = optionalUser.get();
+        BeanUtils.copyProperties(user, updateUser, UpdateUtil.getNullPropertyNames(user));
+        return userRepository.save(updateUser);
     }
 }
